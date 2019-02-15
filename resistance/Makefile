@@ -1,4 +1,6 @@
 #
+# Create RASE metadata table from user-provided MICs and breakpoints.
+#
 # Author:  Karel Brinda <kbrinda@hsph.harvard.edu>
 #
 # License: MIT
@@ -12,13 +14,13 @@ SHELL=/usr/bin/env bash -eo pipefail
 
 include ../conf.mk
 
-# print leave order
-TPO=../rase/rase/rase_db_tree_print_order.py
-# assign res categories
-ARC=../rase/rase/rase_db_assign_re_cat.py
-# ancestral state reconstruction
-ASR=../rase/rase/rase_db_ancestral_state_reconstruction.py
-# sort with header
+# print order of leaves in the tree (to keep the same order for plotting)
+TPO=../rase/src/rase/rase_db_tree_print_order.py
+# assign resistance categories (applying breakpoints)
+ARC=../rase/src/rase/rase_db_assign_re_cat.py
+# ancestral state reconstruction (inferring missing categories)
+ASR=../rase/src/rase/rase_db_ancestral_state_reconstruction.py
+# sort text files with header
 SWH=../rase/scripts/sort_with_header.sh
 
 all: .res_cat.complete
