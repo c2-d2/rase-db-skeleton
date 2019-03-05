@@ -11,11 +11,7 @@
 DIRS=tree isolates resistance index _output published unpublished
 ALLDIRS=$(DIRS) plots
 
-.PHONY: all help clean cleanall data cluster plots $(DIRS)
-.SECONDARY:
-.SUFFIXES:
-
-SHELL=/usr/bin/env bash -eo pipefail
+.PHONY: all clean cleanall data cluster plots $(DIRS)
 
 include ./conf.mk
 
@@ -37,7 +33,6 @@ resistance: tree data
 	$(MAKE) -C resistance
 
 plots: ## Generate plots
-plots:
 	$(MAKE) -C plots
 
 index: ## Construct ProPhyle k-mer index
@@ -58,9 +53,6 @@ cluster: ## Submit RASE DB construction as a job to a cluster
 	snakemake --cores 9999 -p \
 		--cluster-config ../cluster.json \
 		--cluster 'sbatch -p {cluster.queue} -n {cluster.n} -t {cluster.time} --mem={cluster.memory}'
-
-help: ## Print help message
-	@echo "$$(grep -hE '^\S+:.*##' $(MAKEFILE_LIST) | sed -e 's/:.*##\s*/:/' -e 's/^\(.\+\):\(.*\)/\\x1b[36m\1\\x1b[m:\2/' | column -c2 -t -s : | sort)"
 
 clean: ## Clean
 	for x in $(ALLDIRS); do \

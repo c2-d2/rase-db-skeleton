@@ -4,13 +4,7 @@
 # License: MIT
 #
 
-.PHONY: all help clean cleanall merge
-.SECONDARY:
-.SUFFIXES:
-
-SHELL=/usr/bin/env bash -eo pipefail
-
-include ../conf.mk
+.PHONY: all clean cleanall merge
 
 all: .plot.complete .stats.complete .merge.mic.complete .merge.res_tree.complete
 
@@ -21,10 +15,10 @@ all: .plot.complete .stats.complete .merge.mic.complete .merge.res_tree.complete
 	touch $@
 
 .plot.%.complete:
-	../../scripts/plot_mic.R ../resistance/res_cat.tsv -b $($*) $* res_cat.$*.basic.pdf
-	../../scripts/reproducible_pdf.sh                              res_cat.$*.basic.pdf
-	../../scripts/plot_mic.R -z ../resistance/res_cat.tsv -b $($*) $* res_cat.$*.zoomed.pdf
-	../../scripts/reproducible_pdf.sh                                 res_cat.$*.zoomed.pdf
+	plot_mic.R ../resistance/res_cat.tsv -b $($*) $* res_cat.$*.basic.pdf
+	reproducible_pdf.sh                              res_cat.$*.basic.pdf
+	plot_mic.R -z ../resistance/res_cat.tsv -b $($*) $* res_cat.$*.zoomed.pdf
+	eproducible_pdf.sh                                 res_cat.$*.zoomed.pdf
 	touch $@
 
 .merge.mic.complete: .plot.complete
@@ -49,12 +43,10 @@ all: .plot.complete .stats.complete .merge.mic.complete .merge.res_tree.complete
 	../../scripts/reproducible_pdf.sh $(name).res_tree.pdf
 	touch $@
 
-help: ## Print help message
-	@echo "$$(grep -hE '^\S+:.*##' $(MAKEFILE_LIST) | sed -e 's/:.*##\s*/:/' -e 's/^\(.\+\):\(.*\)/\\x1b[36m\1\\x1b[m:\2/' | column -c2 -t -s : | sort)"
-
 clean: ## Clean
 	rm -f res_cat.*.pdf .*.complete
 	rm -f res_tree.*.pdf
 
 cleanall: clean ## Clean
 	rm -f *.pdf *.tsv
+

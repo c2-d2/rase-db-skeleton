@@ -7,12 +7,9 @@
 # License: MIT
 #
 
-.PHONY: all test help clean cleanall
+.PHONY: all test clean cleanall
 
-.SECONDARY:
-.SUFFIXES:
-
-SHELL=/usr/bin/env bash -eo pipefail
+include ../conf.mk
 
 all: test
 
@@ -25,9 +22,6 @@ test: ## Check if all files are present
 	#test -f tree.newick
 	#test -f tree_metadata.tsv
 	#test -f isolates.tar.gz
-
-help: ## Print help message
-	@echo "$$(grep -hE '^\S+:.*##' $(MAKEFILE_LIST) | sed -e 's/:.*##\s*/:/' -e 's/^\(.\+\):\(.*\)/\\x1b[36m\1\\x1b[m:\2/' | column -c2 -t -s : | sort)"
 
 clean: ## Clean
 

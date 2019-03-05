@@ -6,34 +6,20 @@
 # License: MIT
 #
 
-.PHONY: all help clean cleanall
-.SECONDARY:
-.SUFFIXES:
-
-SHELL=/usr/bin/env bash -eo pipefail
+.PHONY: all clean cleanall
 
 include ../conf.mk
-
-# print order of leaves in the tree (to keep the same order for plotting)
-TPO=../rase/src/rase/rase_db_tree_print_order.py
-# assign resistance categories (applying breakpoints)
-ARC=../rase/src/rase/rase_db_assign_re_cat.py
-# ancestral state reconstruction (inferring missing categories)
-ASR=../rase/src/rase/rase_db_ancestral_state_reconstruction.py
-# sort text files with header
-SWH=../rase/scripts/sort_with_header.sh
 
 all: .res_cat.complete
 
 .res_cat.complete:
-	$(TPO) -i ../tree/tree.newick > _leaves.tsv
+	# 1) print order of leaves in the tree (to keep the same order in plots)
+	rase_db_tree_print_order.py -i ../tree/tree.newick > _leaves.tsv
 
-	# sort metadata tables
-	cat ../published/isolates.2013.tsv | $(SWH) -k 3 > _isolates.2013.tsv
-	cat ../published/isolates.2015.tsv | $(SWH) -k 2 > _isolates.2015.tsv
+	# 2) sort metadata tables and check if taxids are the same
+	cat ../published/isolates.2013.tsv | sort_with_header.sh -k 3 > _isolates.2013.tsv
+	cat ../published/isolates.2015.tsv | sort_with_header.sh -k 2 > _isolates.2015.tsv
 
-
-	# check if taxids are the same
 	cut -f3 _isolates.2013.tsv | tail -n +2 > _taxids1.txt
 	cut -f2 _isolates.2015.tsv | tail -n +2 > _taxids2.txt
 	cut -f1 _leaves.tsv        | tail -n +2 > _taxids3.txt
@@ -41,20 +27,20 @@ all: .res_cat.complete
 	diff _taxids1.txt _taxids3.txt
 
 
-	# assign resistance categories
-	$(ARC) -i _isolates.2013.tsv -t 2 -b $(pen) -m 12 -a pen > _res_cat.pen.tsv
-	$(ARC) -i _isolates.2013.tsv -t 2 -b $(cro) -m 13 -a cro > _res_cat.cro.tsv
-	$(ARC) -i _isolates.2013.tsv -t 2 -b $(tmp) -m 14 -a tmp > _res_cat.tmp.tsv
-	$(ARC) -i _isolates.2013.tsv -t 2 -b $(ery) -m 15 -a ery > _res_cat.ery.tsv
-	$(ARC) -i _isolates.2013.tsv -t 2 -b $(tet) -m 16 -a tet > _res_cat.tet.tsv
+	# 3) assign resistance categories (apply breakpoints)
+	rase_db_assign_re_cat.py -i _isolates.2013.tsv -t 2 -b $(pen) -m 12 -a pen > _res_cat.pen.tsv
+	rase_db_assign_re_cat.py -i _isolates.2013.tsv -t 2 -b $(cro) -m 13 -a cro > _res_cat.cro.tsv
+	rase_db_assign_re_cat.py -i _isolates.2013.tsv -t 2 -b $(tmp) -m 14 -a tmp > _res_cat.tmp.tsv
+	rase_db_assign_re_cat.py -i _isolates.2013.tsv -t 2 -b $(ery) -m 15 -a ery > _res_cat.ery.tsv
+	rase_db_assign_re_cat.py -i _isolates.2013.tsv -t 2 -b $(tet) -m 16 -a tet > _res_cat.tet.tsv
 
-	# ancestral state reconstruction
+	# 4) perform ancestral state reconstruction (infer missing resistance categories)
 	for x in _res*.tsv; do \
 		ant=$$(echo "$$x" | sed 's/.tsv$$//g' | sed 's/_res_cat\.//g'); \
-		$(ASR) -a $$ant -i "$$x" -t ../tree/tree.newick -p "_res_tree.$$ant.pdf" > "_$$x"; \
+		rase_db_assign_re_cat.py -a $$ant -i "$$x" -t ../tree/tree.newick -p "_res_tree.$$ant.pdf" > "_$$x"; \
 	done
 
-	# assemble the final file
+	# 5) assemble the final file with metadata
 	paste \
 		<(echo "taxid"; cat _taxids1.txt) \
 		<(cut -f 13  _isolates.2015.tsv | sed 's/Sequence Cluster/phylogroup/g') \
@@ -69,9 +55,6 @@ all: .res_cat.complete
 	> res_cat.tsv
 
 	touch $@
-
-help: ## Print help message
-	@echo "$$(grep -hE '^\S+:.*##' $(MAKEFILE_LIST) | sed -e 's/:.*##\s*/:/' -e 's/^\(.\+\):\(.*\)/\\x1b[36m\1\\x1b[m:\2/' | column -c2 -t -s : | sort)"
 
 clean: ## Clean
 	rm -f _*.{tsv,txt} .*.complete *.pdf
