@@ -1,6 +1,6 @@
 taxid	phylogroup	antibiotic 1	antibiotic 2
-isolate_5	1	>8	5.0
+isolate_5	2	>8	5.0
 isolate_1	1	0.025	0.25
-isolate_3	2	10	<0.25
-isolate_4	2	?	0.50
-isolate_2	2	0.05	0.25
+isolate_3	1	10	<0.25
+isolate_4	2	NA	0.50
+isolate_2	1	0.05	0.25

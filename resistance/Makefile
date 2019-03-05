@@ -19,41 +19,25 @@ step1: ## Print order of leaves to a file (to keep the same order everywhere)
 	rase_db_tree_print_order.py -i ../tree/tree.newick > _leaves.tsv
 
 step2: step1 ## Sort metadata tables
-	cat ../published/isolates.2013.tsv | sort_with_header.sh -k 3 > _isolates.2013.tsv
-	cat ../published/isolates.2015.tsv | sort_with_header.sh -k 2 > _isolates.2015.tsv
-
-	cut -f3 _isolates.2013.tsv | tail -n +2 > _taxids1.txt
-	cut -f2 _isolates.2015.tsv | tail -n +2 > _taxids2.txt
-	cut -f1 _leaves.tsv        | tail -n +2 > _taxids3.txt
-	diff _taxids1.txt _taxids2.txt
-	diff _taxids1.txt _taxids3.txt
-
+	cat ../published/isolates.example.tsv | sort_with_header.sh -k 1 > _isolates.tsv
+	cut -f1 _isolates.tsv | tail -n +2 > _taxids.txt
+	cut -f2 _isolates.tsv | tail -n +2 > _phylogroups.txt
 
 step3: step2 ## Assign resistance categories (apply breakpoints)
-	rase_db_assign_re_cat.py -i _isolates.2013.tsv -t 2 -b $(pen) -m 12 -a pen > _res_cat.pen.tsv
-	rase_db_assign_re_cat.py -i _isolates.2013.tsv -t 2 -b $(cro) -m 13 -a cro > _res_cat.cro.tsv
-	rase_db_assign_re_cat.py -i _isolates.2013.tsv -t 2 -b $(tmp) -m 14 -a tmp > _res_cat.tmp.tsv
-	rase_db_assign_re_cat.py -i _isolates.2013.tsv -t 2 -b $(ery) -m 15 -a ery > _res_cat.ery.tsv
-	rase_db_assign_re_cat.py -i _isolates.2013.tsv -t 2 -b $(tet) -m 16 -a tet > _res_cat.tet.tsv
+	rase_db_assign_re_cat.py --in-tsv _isolates.tsv --taxid-col 0 --breakpoint $(ant1) --mic-col 2 --antibiotic ant1 > _res_cat.ant1.tsv
+	rase_db_assign_re_cat.py --in-tsv _isolates.tsv --taxid-col 0 --breakpoint $(ant2) --mic-col 3 --antibiotic ant1 > _res_cat.ant2.tsv
 
 step4: step3 ## Perform ancestral state reconstruction (infer missing resistance categories)
-	for x in _res*.tsv; do \
-		ant=$$(echo "$$x" | sed 's/.tsv$$//g' | sed 's/_res_cat\.//g'); \
-		rase_db_assign_re_cat.py -a $$ant -i "$$x" -t ../tree/tree.newick -p "_res_tree.$$ant.pdf" > "_$$x"; \
-	done
+	rase_db_ancestral_state_reconstruction.py --antibiotic ant1 --in-tsv "_res_cat.ant1.tsv" --tree ../tree/tree.newick --plot-pdf _res_cat.ant1.pdf > __res_cat.ant1.tsv; \
+	rase_db_ancestral_state_reconstruction.py --antibiotic ant2 --in-tsv "_res_cat.ant2.tsv" --tree ../tree/tree.newick --plot-pdf _res_cat.ant2.pdf > __res_cat.ant2.tsv; \
 
 step5: step4 ## Assemble metadata file
 	paste \
-		<(echo "taxid"; cat _taxids1.txt) \
-		<(cut -f 13  _isolates.2015.tsv | sed 's/Sequence Cluster/phylogroup/g') \
-		<(cut -f 9   _isolates.2015.tsv | sed 's/Serotype From Reads/serotype/g') \
-		<(cut -f 11  _isolates.2015.tsv | sed 's/Sequence Type From Reads/ST/g') \
+		<(echo "taxid"; cat _taxids.txt) \
+		<(echo "pg"; cat _phylogroups.txt) \
 		<(cut -f 2   _leaves.tsv) \
-		<(cut -f 2-4 __res_cat.pen.tsv) \
-		<(cut -f 2-4 __res_cat.cro.tsv) \
-		<(cut -f 2-4 __res_cat.tmp.tsv) \
-		<(cut -f 2-4 __res_cat.ery.tsv) \
-		<(cut -f 2-4 __res_cat.tet.tsv) \
+		<(cut -f 2-4 __res_cat.ant1.tsv) \
+		<(cut -f 2-4 __res_cat.ant2.tsv) \
 	> res_cat.tsv
 
 clean:

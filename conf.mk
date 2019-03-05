@@ -33,7 +33,7 @@ antibiotics:=ant1 ant2
 ###############
 
 ant1:=0.06  # Antibiotics 1
-ant2:=0.25  # Antibiotics 2
+ant2:=0.50  # Antibiotics 2
 
 
 #############
