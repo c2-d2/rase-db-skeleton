@@ -1,6 +1,0 @@
-taxid	antibiotic 1	antibiotic 2
-isolate 1	0.025	0.25
-isolate 2	0.05	0.25
-isolate 3	10	<0.25
-isolate 4	?	0.50
-isolate 5	>8	5.0
