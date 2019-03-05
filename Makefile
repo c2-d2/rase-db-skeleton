@@ -8,7 +8,7 @@
 # License: MIT
 #
 
-DIRS=tree isolates resistance index _output published unpublished
+DIRS=tree isolates resistance index _output output published unpublished
 ALLDIRS=$(DIRS) plots
 
 .PHONY: data cluster plots $(DIRS)
@@ -17,7 +17,7 @@ include ./conf.mk
 
 all: $(DIRS)
 
-data: published unpublished ## Prepare both published and unpublished data
+data: published unpublished ## Prepare published and unpublished data
 
 tree: data ## Prepare phylogenetic tree
 	$(MAKE) -C tree
@@ -34,16 +34,17 @@ plots: ## Generate plots
 index: tree isolates ## Construct ProPhyle k-mer index
 	$(MAKE) -C index
 
-_output: index resistance ## Copy the database file to _output
+output: _output ## Copy database files to _output
+_output: index resistance
 	$(MAKE) -C _output
 
-published: ## Download and/or process published data
+published: ## Download and process published data
 	$(MAKE) -C published
 
-unpublished: ## Download and/or process published data
+unpublished: ## Verify that unpublished data were properly copied
 	$(MAKE) -C unpublished
 
-cluster: ## Submit RASE DB construction as a job to a cluster
+cluster: ## Submit RASE DB construction to cluster
 	snakemake --cores 9999 -p \
 		--cluster-config ../cluster.json \
 		--cluster 'sbatch -p {cluster.queue} -n {cluster.n} -t {cluster.time} --mem={cluster.memory}'
