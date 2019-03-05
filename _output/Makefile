@@ -4,8 +4,6 @@
 # License: MIT
 #
 
-.PHONY: all clean cleanall
-
 include ../conf.mk
 
 all: $(foreach onek,$(k),.$(onek).complete)
@@ -15,7 +13,5 @@ all: $(foreach onek,$(k),.$(onek).complete)
 	cp ../index/$(name).k$*.tar.gz $(name).k$*.tar.gz
 	touch $@
 
-clean: ## Clean
+clean:
 	rm -f .*.complete *.tar.gz *.tsv
-
-cleanall: clean

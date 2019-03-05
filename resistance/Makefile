@@ -6,7 +6,7 @@
 # License: MIT
 #
 
-.PHONY: all clean cleanall step1 step2 step3 step4 step5
+.PHONY: step1 step2 step3 step4 step5
 
 include ../conf.mk
 
@@ -59,5 +59,5 @@ step5: step4 ## Assemble metadata file
 clean:
 	rm -f _*.{tsv,txt} .*.complete *.pdf
 
-cleanall: clean
+cleanall:
 	rm -f *.tsv

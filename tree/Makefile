@@ -4,8 +4,6 @@
 # License: MIT
 #
 
-.PHONY: all  clean cleanall
-
 include ../conf.mk
 
 all: .complete
@@ -23,7 +21,7 @@ all: .complete
 	touch $@
 
 
-clean: ## Clean
+clean:
 	rm -f _*.newick .complete
 
 cleanall: clean

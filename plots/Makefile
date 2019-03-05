@@ -4,8 +4,6 @@
 # License: MIT
 #
 
-.PHONY: all clean cleanall merge
-
 all: .plot.complete .stats.complete .merge.mic.complete .merge.res_tree.complete
 
 .plot.complete: $(foreach ant,$(antibiotics),.plot.$(ant).complete)
@@ -18,7 +16,7 @@ all: .plot.complete .stats.complete .merge.mic.complete .merge.res_tree.complete
 	plot_mic.R ../resistance/res_cat.tsv -b $($*) $* res_cat.$*.basic.pdf
 	reproducible_pdf.sh                              res_cat.$*.basic.pdf
 	plot_mic.R -z ../resistance/res_cat.tsv -b $($*) $* res_cat.$*.zoomed.pdf
-	eproducible_pdf.sh                                 res_cat.$*.zoomed.pdf
+	reproducible_pdf.sh                                 res_cat.$*.zoomed.pdf
 	touch $@
 
 .merge.mic.complete: .plot.complete
@@ -43,10 +41,9 @@ all: .plot.complete .stats.complete .merge.mic.complete .merge.res_tree.complete
 	../../scripts/reproducible_pdf.sh $(name).res_tree.pdf
 	touch $@
 
-clean: ## Clean
+clean:
 	rm -f res_cat.*.pdf .*.complete
 	rm -f res_tree.*.pdf
 
-cleanall: clean ## Clean
+cleanall: clean
 	rm -f *.pdf *.tsv
-

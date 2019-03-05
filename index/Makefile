@@ -4,8 +4,6 @@
 # License: MIT
 #
 
-.PHONY: all clean cleanall
-
 include ../conf.mk
 
 all: $(foreach onek,$(k),.compress.$(onek).complete)
@@ -18,7 +16,6 @@ all: $(foreach onek,$(k),.compress.$(onek).complete)
 	prophyle index -k $* -A -g ../isolates ../tree/tree.newick $(name).k$*
 	touch $@
 
-clean: ## Clean
-	rm -fr $$(ls -d */) *.tar.gz .*.complete
-
-cleanall: clean ## Cleanall
+clean:
+	rm -f *.tar.gz .*.complete
+	rm -fr $$(ls -d */)

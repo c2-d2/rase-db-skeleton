@@ -7,7 +7,7 @@
 # License: MIT
 #
 
-.PHONY: all test clean cleanall
+.PHONY: test
 
 include ../conf.mk
 
@@ -23,9 +23,6 @@ test: ## Check if all files are present
 	#test -f tree_metadata.tsv
 	#test -f isolates.tar.gz
 
-clean: ## Clean
-
-cleanall: ## Remove all copied data.
 cleanall: clean
 
 	##
