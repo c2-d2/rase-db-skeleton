@@ -8,10 +8,10 @@
 # License: MIT
 #
 
-DIRS=tree isolates resistance index _output output published unpublished
+DIRS=tree isolates resistance index _output published unpublished
 ALLDIRS=$(DIRS) plots
 
-.PHONY: data cluster plots $(DIRS)
+.PHONY: data cluster plots $(DIRS) output
 
 include ./conf.mk
 
