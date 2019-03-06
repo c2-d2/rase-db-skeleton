@@ -28,8 +28,8 @@ step3: step2 ## Assign resistance categories (apply breakpoints)
 	rase_db_assign_re_cat.py --in-tsv _isolates.tsv --taxid-col 0 --breakpoint $(ant2) --mic-col 3 --antibiotic ant1 > _res_cat.ant2.tsv
 
 step4: step3 ## Perform ancestral state reconstruction (infer missing resistance categories)
-	rase_db_ancestral_state_reconstruction.py --antibiotic ant1 --in-tsv "_res_cat.ant1.tsv" --tree ../tree/tree.newick --plot-pdf _res_cat.ant1.pdf > __res_cat.ant1.tsv; \
-	rase_db_ancestral_state_reconstruction.py --antibiotic ant2 --in-tsv "_res_cat.ant2.tsv" --tree ../tree/tree.newick --plot-pdf _res_cat.ant2.pdf > __res_cat.ant2.tsv; \
+	rase_db_ancestral_state_reconstruction.py --antibiotic ant1 --in-tsv "_res_cat.ant1.tsv" --tree ../tree/tree.newick > __res_cat.ant1.tsv; \
+	rase_db_ancestral_state_reconstruction.py --antibiotic ant2 --in-tsv "_res_cat.ant2.tsv" --tree ../tree/tree.newick > __res_cat.ant2.tsv; \
 
 step5: step4 ## Assemble metadata file
 	paste \
