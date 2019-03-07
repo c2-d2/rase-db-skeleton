@@ -9,7 +9,7 @@ set -u
 >&2 echo "Checking dependencies"
 >&2 echo "---------------------"
 >&2 echo
-for x in git curl /usr/bin/env python; do
+for x in git curl /usr/bin/env python3; do
 	hash $x 2>/dev/null || { echo >&2 "$x is required but it's not installed. Aborting."; exit 1; }
 done
 
@@ -30,7 +30,7 @@ git init
 >&2 echo "Reading SHA of RASE submodule"
 >&2 echo "-----------------------------"
 >&2 echo
-sha=$(curl -L https://api.github.com/repos/c2-d2/rase-db-skeleton/contents/rase | python -c "import sys, json; print json.load(sys.stdin)['sha']")
+sha=$(curl -L https://api.github.com/repos/c2-d2/rase-db-skeleton/contents/rase | /usr/bin/env python3 -c "import sys, json; print(json.load(sys.stdin)['sha'])")
 
 >&2 echo
 >&2 echo "Adding RASE submodule"
