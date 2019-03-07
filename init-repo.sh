@@ -6,6 +6,13 @@ set -u
 
 
 >&2 echo
+>&2 echo "Checking current directory"
+>&2 echo "--------------------------"
+>&2 echo
+(find .  | grep -Ev '^\.$') > /dev/null && { echo >&2 "Directory is not empty. Aborting."; exit 1; }
+
+
+>&2 echo
 >&2 echo "Checking dependencies"
 >&2 echo "---------------------"
 >&2 echo
