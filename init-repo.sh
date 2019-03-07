@@ -34,15 +34,10 @@ rmdir rase
 git init
 
 >&2 echo
->&2 echo "Reading SHA of RASE submodule"
->&2 echo "-----------------------------"
->&2 echo
-sha=$(curl -L https://api.github.com/repos/c2-d2/rase-db-skeleton/contents/rase | /usr/bin/env python3 -c "import sys, json; print(json.load(sys.stdin)['sha'])")
-
->&2 echo
 >&2 echo "Adding RASE submodule"
 >&2 echo "---------------------"
 >&2 echo
+sha=$(curl -L https://api.github.com/repos/c2-d2/rase-db-skeleton/contents/rase | /usr/bin/env python3 -c "import sys, json; print(json.load(sys.stdin)['sha'])")
 git submodule add ssh://git@github.com/karel-brinda/rase
 (cd rase && git checkout $sha)
 
