@@ -4,6 +4,15 @@ set -e
 set -o pipefail
 set -u
 
+
+>&2 echo
+>&2 echo "Checking dependencies"
+>&2 echo "---------------------"
+>&2 echo
+for x in git curl /usr/bin/env python; do
+	hash $x 2>/dev/null || { echo >&2 "$x is required but it's not installed. Aborting."; exit 1; }
+done
+
 >&2 echo
 >&2 echo "Downloading and extracting RASE DB skeleton"
 >&2 echo "-------------------------------------------"
@@ -38,5 +47,7 @@ git add .
 git commit -m "Initial RASE DB commit"
 
 >&2 echo
+>&2 echo "-----------------------------------------------------"
 >&2 echo "RASE DB skeleton creation successfully finished. Bye."
+>&2 echo "-----------------------------------------------------"
 
