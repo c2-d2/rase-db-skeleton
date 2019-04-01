@@ -33,16 +33,17 @@ step3: ## Assign resistance categories (apply breakpoints)
 	rase_db_assign_re_cat.py --in-tsv _isolates.tsv --taxid-col 0 --breakpoint $(ant2) --mic-col 3 --antibiotic ant1 > _res_cat.ant2.tsv
 
 step4: ## Perform ancestral state reconstruction (infer missing resistance categories)
-	rase_db_ancestral_state_reconstruction.py --antibiotic ant1 --in-tsv "_res_cat.ant1.tsv" --tree ../tree/tree.newick > __res_cat.ant1.tsv; \
-	rase_db_ancestral_state_reconstruction.py --antibiotic ant2 --in-tsv "_res_cat.ant2.tsv" --tree ../tree/tree.newick > __res_cat.ant2.tsv; \
+	for ant in $(antibiotics); do \
+		echo "Ancestral state reconstruction: $$ant"; \
+		rase_db_ancestral_state_reconstruction.py --antibiotic $$ant --in-tsv "_res_cat.$$ant.tsv" --tree ../tree/tree.newick > __res_cat.$$ant.tsv; \
+	done
 
 step5: ## Assemble metadata file
 	paste \
 		<(echo "taxid"; cat _taxids.txt) \
 		<(echo "pg"; cat _phylogroups.txt) \
 		<(cut -f 2   _leaves.tsv) \
-		<(cut -f 2-4 __res_cat.ant1.tsv) \
-		<(cut -f 2-4 __res_cat.ant2.tsv) \
+		$(foreach ant, $(antibiotics),<(cut -f 2-4 __res_cat.$(ant).tsv) )
 	> res_cat.tsv
 
 clean:
