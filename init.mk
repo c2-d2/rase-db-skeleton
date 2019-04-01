@@ -7,7 +7,7 @@
 #
 
 SHELL=/usr/bin/env bash -eo pipefail
-export PATH := ../../rase/scripts:../../rase/src/rase:$(PATH)
+export PATH := ../rase/scripts:../rase/src/rase:$(PATH)
 
 .SECONDARY:
 .SUFFIXES:
