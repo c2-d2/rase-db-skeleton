@@ -1,4 +1,4 @@
-include ../conf.mk
+include ../*.mk
 
 all: .complete
 

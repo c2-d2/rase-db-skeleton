@@ -9,7 +9,7 @@
 
 .PHONY: test
 
-include ../conf.mk
+include ../*.mk
 
 all: test
 

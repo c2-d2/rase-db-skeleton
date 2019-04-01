@@ -4,6 +4,8 @@
 # License: MIT
 #
 
+include ../*.mk
+
 all: .plot.complete .stats.complete .merge.mic.complete .merge.res_tree.complete
 
 .plot.complete: $(foreach ant,$(antibiotics),.plot.$(ant).complete)

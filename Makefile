@@ -13,7 +13,7 @@ ALLDIRS=$(DIRS) plots
 
 .PHONY: data cluster plots $(DIRS) output
 
-include ./conf.mk
+include *.mk
 
 all: $(DIRS)
 

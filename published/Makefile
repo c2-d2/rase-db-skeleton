@@ -4,6 +4,6 @@
 # License: MIT
 #
 
-include ../conf.mk
+include ../*.mk
 
 all:

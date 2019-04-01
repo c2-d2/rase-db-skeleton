@@ -4,7 +4,7 @@
 # License: MIT
 #
 
-include ../conf.mk
+include ../*.mk
 
 all: $(foreach onek,$(k),.$(onek).complete)
 
