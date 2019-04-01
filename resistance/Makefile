@@ -35,7 +35,11 @@ step3: ## Assign resistance categories (apply breakpoints)
 step4: ## Perform ancestral state reconstruction (infer missing resistance categories)
 	for ant in $(antibiotics); do \
 		echo "Ancestral state reconstruction: $$ant"; \
-		rase_db_ancestral_state_reconstruction.py --antibiotic $$ant --in-tsv "_res_cat.$$ant.tsv" --tree ../tree/tree.newick > __res_cat.$$ant.tsv; \
+		rase_db_ancestral_state_reconstruction.py \
+			--antibiotic "$$ant" \
+			--in-tsv "_res_cat.$$ant.tsv" \
+			--tree "../tree/tree.newick" \
+			> __res_cat.$$ant.tsv; \
 	done
 
 step5: ## Assemble metadata file
