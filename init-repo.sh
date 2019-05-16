@@ -24,7 +24,7 @@ done
 >&2 echo "Downloading and extracting RASE DB skeleton"
 >&2 echo "-------------------------------------------"
 >&2 echo
-curl -L https://github.com/c2-d2/rase-db-skeleton/archive/master.tar.gz | tar xvf - --strip-components 1
+curl -L https://github.com/c2-d2/rase-db-skeleton/archive/master.tar.gz | tar xzvf - --strip-components 1
 rmdir rase
 rm README.md
 rm init-repo.sh
