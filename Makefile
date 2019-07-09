@@ -13,7 +13,8 @@ ALLDIRS=$(DIRS) plots
 
 .PHONY: data cluster plots $(DIRS) output
 
-include *.mk
+include init.mk
+include conf.mk
 
 all: $(DIRS)
 
@@ -29,7 +30,7 @@ resistance: tree data ## Process resistance data
 	$(MAKE) -C resistance
 
 plots: ## Generate plots
-	$(MAKE) -C plots
+	$(MAKE) -C plots plots
 
 index: tree isolates ## Construct ProPhyle k-mer index
 	$(MAKE) -C index

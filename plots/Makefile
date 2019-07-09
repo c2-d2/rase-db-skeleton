@@ -4,44 +4,59 @@
 # License: MIT
 #
 
-include ../*.mk
+.PHONY: plots
 
-all: .plot.complete .stats.complete .merge.mic.complete .merge.res_tree.complete
+# trick to ensure that path is exported
+all:
+	$(MAKE) -C .. plots
 
-.plot.complete: $(foreach ant,$(antibiotics),.plot.$(ant).complete)
+plots: .stats.complete .mic.complete .res_tree.complete
+
+####
 
 .stats.complete:
-	../../scripts/compute_stats.py ../resistance/res_cat.tsv > $(name).phylogroups.tsv
+	rase_db_compute_stats.py ../resistance/res_cat.tsv > $(name).lineages.tsv
 	touch $@
 
-.plot.%.complete:
-	plot_mic.R ../resistance/res_cat.tsv -b $($*) $* res_cat.$*.basic.pdf
-	reproducible_pdf.sh                              res_cat.$*.basic.pdf
-	plot_mic.R -z ../resistance/res_cat.tsv -b $($*) $* res_cat.$*.zoomed.pdf
-	reproducible_pdf.sh                                 res_cat.$*.zoomed.pdf
-	touch $@
+####
 
-.merge.mic.complete: .plot.complete
+.mic.complete: $(foreach ant,$(antibiotics),.mic.$(ant).complete)
 	/usr/bin/env gs \
 		-sDEVICE=pdfwrite -dCompatibilityLevel=1.4 -dPDFSETTINGS=/default \
 		-dNOPAUSE -dQUIET -dBATCH -dDetectDuplicateImages -dCompressFonts=true -r150 \
 		-dAutoRotatePages=/None \
 		-sOutputFile=$(name).mic.pdf \
-		$(foreach ant,$(antibiotics),res_cat.$(ant).zoomed.pdf)
-
-	../../scripts/reproducible_pdf.sh $(name).mic.pdf
+		$(foreach ant,$(antibiotics),_mic.$(ant).zoomed.pdf)
 	touch $@
 
-.merge.res_tree.complete: $(wildcard ../resistance/_res_tree.*.pdf)
+.mic.%.complete:
+	rase_db_plot_mic.r ../resistance/res_cat.tsv -b $($*) $* _mic.$*.basic.pdf
+	rase_db_plot_mic.r -z ../resistance/res_cat.tsv -b $($*) $* _mic.$*.zoomed.pdf
+	touch $@
+
+
+####
+
+.res_tree.complete: $(foreach ant,$(antibiotics),.res_tree.$(ant).complete)
 	/usr/bin/env gs \
 		-sDEVICE=pdfwrite -dCompatibilityLevel=1.4 -dPDFSETTINGS=/default \
 		-dNOPAUSE -dQUIET -dBATCH -dDetectDuplicateImages -dCompressFonts=true -r150 \
 		-dAutoRotatePages=/None \
 		-sOutputFile=$(name).res_tree.pdf \
-		$(foreach ant,$(antibiotics),../resistance/_res_tree.$(ant).pdf)
-
-	../../scripts/reproducible_pdf.sh $(name).res_tree.pdf
+		$(foreach ant,$(antibiotics),_res_tree.$(ant).pdf)
 	touch $@
+
+.res_tree.%.complete:
+	rase_db_ancestral_state_reconstruction.py \
+		--antibiotic "$*" \
+		--in-tsv "../resistance/_res_cat.$*.tsv"  \
+		--tree "../tree/tree.newick" \
+		--plot-pdf "_res_tree.$*.pdf" \
+		> /dev/null
+	touch $@
+
+
+####
 
 clean:
 	rm -f res_cat.*.pdf .*.complete
