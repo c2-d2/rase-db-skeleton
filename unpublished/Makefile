@@ -7,11 +7,14 @@
 # License: MIT
 #
 
-.PHONY: test
+include ../init.mk
+.PHONY: test unpublished
 
-include ../*.mk
+# trick to ensure that path is exported
+all:
+	$(MAKE) -C .. unpublished
 
-all: test
+unpublished: test
 
 test: ## Check if all files are present
 

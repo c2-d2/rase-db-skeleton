@@ -13,36 +13,37 @@ ALLDIRS=$(DIRS) plots
 
 .PHONY: data cluster plots $(DIRS) output
 
-include *.mk
+include init.mk
+include conf.mk
 
 all: $(DIRS)
 
 data: published unpublished ## Prepare published and unpublished data
 
 tree: data ## Prepare phylogenetic tree
-	$(MAKE) -C tree
+	$(MAKE) -C tree tree
 
 isolates: data ## Download isolates
-	$(MAKE) -C isolates
+	$(MAKE) -C isolates isolates
 
 resistance: tree data ## Process resistance data
-	$(MAKE) -C resistance
+	$(MAKE) -C resistance resistance
 
 plots: ## Generate plots
-	$(MAKE) -C plots
+	$(MAKE) -C plots plots
 
 index: tree isolates ## Construct ProPhyle k-mer index
-	$(MAKE) -C index
+	$(MAKE) -C index index
 
 output: _output ## Copy database files to _output
 _output: index resistance
-	$(MAKE) -C _output
+	$(MAKE) -C _output _output
 
 published: ## Download and process published data
-	$(MAKE) -C published
+	$(MAKE) -C published published
 
 unpublished: ## Verify that unpublished data were properly copied
-	$(MAKE) -C unpublished
+	$(MAKE) -C unpublished unpublished
 
 cluster: ## Submit RASE DB construction to cluster
 	snakemake --cores 9999 -p \

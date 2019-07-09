@@ -4,9 +4,14 @@
 # License: MIT
 #
 
-include ../*.mk
+include ../init.mk
+.PHONY: index
 
-all: $(foreach onek,$(k),.compress.$(onek).complete)
+# trick to ensure that path is exported
+all:
+	$(MAKE) -C .. index
+
+index: $(foreach onek,$(k),.compress.$(onek).complete)
 
 .compress.%.complete: .index.%.complete
 	prophyle compress $(name).k$* $(name).k$*.tar.gz

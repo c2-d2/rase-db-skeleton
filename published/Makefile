@@ -4,6 +4,11 @@
 # License: MIT
 #
 
-include ../*.mk
+include ../init.mk
+.PHONY: published
 
+# trick to ensure that path is exported
 all:
+	$(MAKE) -C .. published
+
+published:

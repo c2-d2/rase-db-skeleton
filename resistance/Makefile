@@ -6,11 +6,14 @@
 # License: MIT
 #
 
-.PHONY: step1 step2 step3 step4 step5
+include ../init.mk
+.PHONY: resistance step1 step2 step3 step4 step5
 
-include ../*.mk
+# trick to ensure that path is exported
+all:
+	$(MAKE) -C .. resistance
 
-all: .res_cat.complete
+resistance: .res_cat.complete
 
 .res_cat.complete:
 	$(MAKE) step1
@@ -30,7 +33,7 @@ step2: ## Assemble metadata tables
 
 step3: ## Assign resistance categories (apply breakpoints)
 	rase_db_assign_re_cat.py --in-tsv _isolates.tsv --taxid-col 0 --breakpoint $(ant1) --mic-col 2 --antibiotic ant1 > _res_cat.ant1.tsv
-	rase_db_assign_re_cat.py --in-tsv _isolates.tsv --taxid-col 0 --breakpoint $(ant2) --mic-col 3 --antibiotic ant1 > _res_cat.ant2.tsv
+	rase_db_assign_re_cat.py --in-tsv _isolates.tsv --taxid-col 0 --breakpoint $(ant2) --mic-col 3 --antibiotic ant2 > _res_cat.ant2.tsv
 
 step4: ## Perform ancestral state reconstruction (infer missing resistance categories)
 	for ant in $(antibiotics); do \
