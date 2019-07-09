@@ -6,11 +6,14 @@
 # License: MIT
 #
 
-.PHONY: step1 step2 step3 step4 step5
+include ../init.mk
+.PHONY: resistance step1 step2 step3 step4 step5
 
-include ../*.mk
+# trick to ensure that path is exported
+all:
+	$(MAKE) -C .. resistance
 
-all: .res_cat.complete
+resistance: .res_cat.complete
 
 .res_cat.complete:
 	$(MAKE) step1

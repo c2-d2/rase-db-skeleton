@@ -4,9 +4,14 @@
 # License: MIT
 #
 
-include ../*.mk
+include ../init.mk
+.PHONY: _output
 
-all: $(foreach onek,$(k),.$(onek).complete)
+# trick to ensure that path is exported
+all:
+	$(MAKE) -C .. _output
+
+_output: $(foreach onek,$(k),.$(onek).complete)
 
 .%.complete:
 	cp ../resistance/res_cat.tsv $(name).k$*.tsv

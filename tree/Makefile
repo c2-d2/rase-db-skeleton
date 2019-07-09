@@ -4,9 +4,14 @@
 # License: MIT
 #
 
-include ../*.mk
+include ../init.mk
+.PHONY: tree
 
-all: .complete
+# trick to ensure that path is exported
+all:
+	$(MAKE) -C .. tree
+
+tree: .complete
 
 .complete:
 	rase_db_prepare_tree.py \

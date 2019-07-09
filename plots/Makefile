@@ -4,6 +4,7 @@
 # License: MIT
 #
 
+include ../init.mk
 .PHONY: plots
 
 # trick to ensure that path is exported
