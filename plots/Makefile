@@ -30,8 +30,8 @@ plots: .stats.complete .mic.complete .res_tree.complete
 	touch $@
 
 .mic.%.complete:
-	rase_db_plot_mic.r ../resistance/res_cat.tsv -b $($*) $* _mic.$*.basic.pdf
-	rase_db_plot_mic.r -z ../resistance/res_cat.tsv -b $($*) $* _mic.$*.zoomed.pdf
+	rase_db_plot_mic.R ../resistance/res_cat.tsv -b $($*) $* _mic.$*.basic.pdf
+	rase_db_plot_mic.R -z ../resistance/res_cat.tsv -b $($*) $* _mic.$*.zoomed.pdf
 	touch $@
 
 
