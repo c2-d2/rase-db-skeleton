@@ -2,7 +2,7 @@
 
 ## Creating a custom RASE DB
 
-1. [Set up your computational environment.](https://github.com/karel-brinda/rase#computational-environment)
+1. [Set up your computational environment.](https://github.com/c2-d2/rase-pipeline/blob/master/environment.md)
 
 2. Create a repository for your DB on some git-based repository hosting service such as Github, Gitlab, or Bitbucket.
 
