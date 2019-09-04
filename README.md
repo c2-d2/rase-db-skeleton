@@ -14,7 +14,7 @@
 
 4. Interconnect the local repository with the remote one. For Github, this could be done by
    ```
-   git remote add origin git@github.com:your-github-id/your-db-repo
+   git remote add origin git@github.com:your-github-id/your-db-repo.git
    git push -u origin master
    ```
 
