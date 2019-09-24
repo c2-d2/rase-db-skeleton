@@ -48,7 +48,7 @@ step4: ## Perform ancestral state reconstruction (infer missing resistance categ
 step5: ## Assemble metadata file
 	paste \
 		<(echo "taxid"; cat _taxids.txt) \
-		<(echo "pg"; cat _phylogroups.txt) \
+		<(echo "lineage"; cat _phylogroups.txt) \
 		<(cut -f 2   _leaves.tsv) \
 		$(foreach ant, $(antibiotics),<(cut -f 2-4 __res_cat.$(ant).tsv) ) \
 	> res_cat.tsv
