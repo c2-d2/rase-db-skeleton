@@ -42,7 +42,7 @@ git init
 >&2 echo "---------------------"
 >&2 echo
 sha=$(curl -L https://api.github.com/repos/c2-d2/rase-db-skeleton/contents/rase | /usr/bin/env python3 -c "import sys, json; print(json.load(sys.stdin)['sha'])")
-git submodule add ssh://git@github.com/karel-brinda/rase
+git submodule add https://github.com/c2-d2/rase
 (cd rase && git checkout $sha)
 
 >&2 echo
