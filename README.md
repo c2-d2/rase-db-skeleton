@@ -1,5 +1,8 @@
 # RASE DB skeleton
 
+| This repository contains the core RASE package. Other components of the software include the [RASE pipeline](https://github.com/c2-d2/rase-pipeline/) and the [core RASE package](https://github.com/c2-d2/rase). For more information, see the [RASE paper](https://www.biorxiv.org/content/10.1101/403204v2) and the [RASE supplementary materials](https://github.com/c2-d2/rase-supplement/). |
+|-|
+
 ## Creating a custom RASE DB
 
 1. [Set up your computational environment.](https://github.com/c2-d2/rase-pipeline/blob/master/environment.md)
