@@ -1,6 +1,6 @@
 # RASE DB skeleton
 
-| This repository contains the RASE DB skeleton. Other components of the software include the [RASE pipeline](https://github.com/c2-d2/rase-pipeline/) and the [core RASE package](https://github.com/c2-d2/rase). For more information, see the [RASE paper](https://www.biorxiv.org/content/10.1101/403204v2) and the [RASE supplementary materials](https://github.com/c2-d2/rase-supplement/). |
+| This repository contains the RASE DB skeleton for creating new databases for rapid inference of antibiotic resistance and susceptibility using RASE. Other components of the software include the [RASE pipeline](https://github.com/c2-d2/rase-pipeline/) and the [core RASE package](https://github.com/c2-d2/rase). For more information, see the [RASE paper](https://www.biorxiv.org/content/10.1101/403204v2) and the [RASE supplementary materials](https://github.com/c2-d2/rase-supplement/). |
 |-|
 
 ## Creating a custom RASE DB
